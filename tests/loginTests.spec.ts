@@ -1,5 +1,5 @@
 /* 
-Aim of these test is to ensure that a valid user can login, validations are fired, invalid users are presented from loggin in. 
+Aim of these tests is to ensure that a valid user can login, validations are fired, invalid users are presented from loggin in. 
 
 The standard username and password are stored in an object to enhance repeatability by only changing the password in one place.
 If I had more time I'd likely have created  page mode for the log in and inventory page to further abstract the test. I'd also have set the URL as the base in the config save typing
