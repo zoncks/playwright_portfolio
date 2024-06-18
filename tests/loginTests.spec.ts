@@ -7,78 +7,84 @@ it expicitly in the test.
 
 */
 
-import { test, expect, selectors } from "@playwright/test";
 //importing the POM to reuse the Username and Password
-import dataModel from "./dataObjectModel";
+import { test, expect } from "@playwright/test";
+import { DataModel } from "./dataObjectModel";
 
-test.beforeEach(async ({ page }) => {
-  await page.goto("/");
-});
+test.describe("Login Tests", () => {
+  let dataModel: DataModel;
 
-//TEST 1 - Ensure Login Page is Loaded
-test("Assert Login Page extant", async ({ page }) => {
-  //Navigate to the login page
-  await expect(page).toHaveTitle("Swag Labs");
-  expect(page.url()).toEqual("https://www.saucedemo.com/");
-});
-
-//TEST 2 - Ensure a valid user can login
-const validUser = [
-  "standard_user",
-  "locked_out_user",
-  "problem_user",
-  "performance_glitch_user",
-];
-
-validUser.forEach((userName) => {
-  test(`Ensure valid user ${userName} can login`, async ({ page }) => {
-    //Fill in the username and password fields
-    await page.fill('input[name="user-name"]', userName);
-    await page.fill('input[name="password"]', dataModel.password);
-
-    //Click the login button
-    await page.click('input[type="submit"]');
-    //Assert that the user is taken to the inventory page
-    expect(page.url()).toEqual("https://www.saucedemo.com/inventory.html");
+  test.beforeEach(async ({ page }) => {
+    dataModel = new DataModel(page);
+    await page.goto("/");
   });
 
-  //TEST 3 - Ensure username and password are populated and error message correctly updates when supplied.
-  test("Ensure username and password are populated", async ({ page }) => {
-    //submit without populating the fields
-    await page.click('input[type="submit"]');
-
-    //Assert the usernam error message is displayed
-    await expect(page.locator('[data-test="error"]')).toHaveText(
-      "Epic sadface: Username is required"
-    );
-    //Populate the username field and submit without populating password
-    await page.fill('input[name="user-name"]', dataModel.username);
-    await page.click('input[type="submit"]');
-
-    //Assert the password error message is displayed
-    await expect(page.locator('[data-test="error"]')).toHaveText(
-      "Epic sadface: Password is required"
-    );
-    await page.fill('input[name="password"]', dataModel.password);
-
-    //Click the login button
-    await page.click('input[type="submit"]');
-    //Assert that the user is taken to the inventory page
-    expect(page.url()).toEqual("https://www.saucedemo.com/inventory.html");
+  //TEST 1 - Ensure Login Page is Loaded
+  test("Assert Login Page extant", async ({ page }) => {
+    //Navigate to the login page
+    await expect(page).toHaveTitle("Swag Labs");
+    expect(page.url()).toEqual("https://www.saucedemo.com/");
   });
 
-  //TEST 4 - Ensure a invalid user cannot login
+  //TEST 2 - Ensure a valid user can login
+  const validUser = [
+    "standard_user",
+    "locked_out_user",
+    "problem_user",
+    "performance_glitch_user",
+  ];
 
-  test("Ensure a invalid user cannot login", async ({ page }) => {
-    //Fill in the username and password fields
-    await page.fill('input[name="user-name"]', dataModel.username);
-    await page.fill('input[name="password"]', dataModel.incorrectPassword);
+  validUser.forEach((userName) => {
+    test(`Ensure valid user ${userName} can login`, async ({ page }) => {
+      //Fill in the username and password fields
+      await page.fill('input[name="user-name"]', userName);
 
-    //Click the login button
-    await page.click('input[type="submit"]');
-    //Assert that the user presented with an error message
-    await expect(page.locator('[data-test="error"]')).toHaveText(
-      "Epic sadface: Username and password do not match any user in this service"
-    );
+      await page.fill('input[name="password"]', dataModel.password);
+
+      //Click the login button
+      await page.click('input[type="submit"]');
+      //Assert that the user is taken to the inventory page
+      expect(page.url()).toEqual("https://www.saucedemo.com/inventory.html");
+    });
+
+    //TEST 3 - Ensure username and password are populated and error message correctly updates when supplied.
+    test("Ensure username and password are populated", async ({ page }) => {
+      //submit without populating the fields
+      await page.click('input[type="submit"]');
+
+      //Assert the usernam error message is displayed
+      await expect(page.locator('[data-test="error"]')).toHaveText(
+        "Epic sadface: Username is required"
+      );
+      //Populate the username field and submit without populating password
+      await page.fill('input[name="user-name"]', dataModel.userName);
+      await page.click('input[type="submit"]');
+
+      //Assert the password error message is displayed
+      await expect(page.locator('[data-test="error"]')).toHaveText(
+        "Epic sadface: Password is required"
+      );
+      await page.fill('input[name="password"]', dataModel.password);
+
+      //Click the login button
+      await page.click('input[type="submit"]');
+      //Assert that the user is taken to the inventory page
+      expect(page.url()).toEqual("https://www.saucedemo.com/inventory.html");
+    });
+
+    //TEST 4 - Ensure a invalid user cannot login
+
+    test("Ensure a invalid user cannot login", async ({ page }) => {
+      //Fill in the username and password fields
+      await page.fill('input[name="user-name"]', dataModel.userName);
+      await page.fill('input[name="password"]', dataModel.incorrectPassword);
+
+      //Click the login button
+      await page.click('input[type="submit"]');
+      //Assert that the user presented with an error message
+      await expect(page.locator('[data-test="error"]')).toHaveText(
+        "Epic sadface: Username and password do not match any user in this service"
+      );
+    });
   });
 });

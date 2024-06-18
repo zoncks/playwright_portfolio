@@ -20,6 +20,8 @@ export default defineConfig({
      */
     timeout: 5000,
   },
+  snapshotPathTemplate:
+    "{testDir}/visual-regression/{testFileName}/{projectName}/{testName}-GoldenImage{ext}",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -45,28 +47,37 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 1920, height: 1080 },
+      },
     },
 
     {
       name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      use: {
+        ...devices["Desktop Firefox"],
+        viewport: { width: 1920, height: 1080 },
+      },
     },
 
     {
       name: "webkit",
-      use: { ...devices["Desktop Safari"] },
+      use: {
+        ...devices["Desktop Safari"],
+        viewport: { width: 1920, height: 1080 },
+      },
     },
 
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
+    {
+      name: "Android",
+      use: { ...devices["Pixel 5"] },
+    },
+
+    {
+      name: "iOS",
+      use: { ...devices["iPhone 12"] },
+    },
 
     /* Test against branded browsers. */
     // {
