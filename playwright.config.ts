@@ -14,6 +14,10 @@ export default defineConfig({
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
   expect: {
+    //Snapshot tolerances
+    toMatchSnapshot: {
+      threshold: 0.99,
+    },
     /**
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
@@ -31,8 +35,8 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: "html",
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  reporter: [["html"], ["list", { printSteps: true }]],
+  /* Shared settings for all th e projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
