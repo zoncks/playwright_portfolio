@@ -1,10 +1,6 @@
 /* 
 Aim of these tests is to ensure that a valid user can login, validations are fired, invalid users are presented from loggin in. 
-
 The standard username and password are stored in an object to enhance repeatability by only changing the password in one place.
-If I had more time I'd likely have created  page mode for the log in and inventory page to further abstract the test. I'd also have set the URL as the base in the config save typing
-it expicitly in the test.
-
 */
 
 //importing the POM to reuse the Username and Password
@@ -18,6 +14,7 @@ test.describe("Login Tests", () => {
 
   test.beforeEach(async ({ page }) => {
     dataModel = new DataModel(page);
+    loginPage = new LoginPage(page);
     await page.goto("/");
   });
 
@@ -28,7 +25,58 @@ test.describe("Login Tests", () => {
     expect(page.url()).toEqual("https://www.saucedemo.com/");
   });
 
-  //TEST 2 - Ensure a valid user can login
+  //TEST 2  - Ensure username validation is present.
+  test("Ensure username validation correctly fires", async ({ page }) => {
+    //submit without populating the fields
+    await loginPage.loginButton.click();
+
+    //Assert the usernam error message is displayed
+    await expect(page.locator('[data-test="error"]')).toHaveText(
+      "Epic sadface: Username is required"
+    );
+  });
+
+  //TEST 3  - Ensure password validation is present.
+  test("Ensure password validation correctly fires", async ({ page }) => {
+    //Populate the username field and submit without populating password
+    await loginPage.usernameInput.fill(dataModel.userName);
+    await loginPage.loginButton.click();
+
+    //Assert the password error message is displayed
+    await expect(page.locator('[data-test="error"]')).toHaveText(
+      "Epic sadface: Password is required"
+    );
+  });
+
+  //TEST 4 - Ensure validation is removed after valid input made
+  test("Ensure validation is removed after valid input made", async ({
+    page,
+  }) => {
+    //submit without populating the fields
+    await loginPage.loginButton.click();
+
+    //Assert the username error message is displayed
+    await expect(page.locator('[data-test="error"]')).toHaveText(
+      "Epic sadface: Username is required"
+    );
+    //Populate the username field and submit without populating password
+    await loginPage.usernameInput.fill(dataModel.userName);
+    await loginPage.loginButton.click();
+
+    //Assert the password error message is displayed
+    await expect(page.locator('[data-test="error"]')).toHaveText(
+      "Epic sadface: Password is required"
+    );
+
+    //Populate the password field
+    await loginPage.passwordInput.fill(dataModel.password);
+    await loginPage.loginButton.click();
+
+    //Assert the password error message is displayed
+    await expect(page.locator('[data-test="error"]')).not.toBeVisible();
+  });
+
+  //TEST 5 - Ensure a valid user can login
   const validUser = [
     "standard_user",
     "problem_user",
@@ -47,35 +95,9 @@ test.describe("Login Tests", () => {
       expect(page.url()).toEqual("https://www.saucedemo.com/inventory.html");
     });
   });
-  //TEST 3 - Ensure username and password are populated and error message correctly updates when supplied.
-  test("Ensure username and password are populated", async ({ page }) => {
-    //submit without populating the fields
-    await loginPage.loginButton.click();
 
-    //Assert the usernam error message is displayed
-    await expect(page.locator('[data-test="error"]')).toHaveText(
-      "Epic sadface: Username is required"
-    );
-
-    //Populate the username field and submit without populating password
-    await loginPage.usernameInput.fill(dataModel.userName);
-    await loginPage.loginButton.click();
-
-    //Assert the password error message is displayed
-    await expect(page.locator('[data-test="error"]')).toHaveText(
-      "Epic sadface: Password is required"
-    );
-    await loginPage.passwordInput.fill(dataModel.password);
-
-    //Click the login button
-    await loginPage.loginButton.click();
-    //Assert that the user is taken to the inventory page
-    expect(page.url()).toEqual("https://www.saucedemo.com/inventory.html");
-  });
-
-  //TEST 4 - Ensure a invalid user cannot login
-
-  test("Ensure a invalid user cannot login", async ({ page }) => {
+  //TEST 6 - Ensure a locked user cannot login
+  test("Ensure a locked out user cannot login", async ({ page }) => {
     //Fill in the username and password fields
     await loginPage.usernameInput.fill("locked_out_user");
     await loginPage.passwordInput.fill(dataModel.password);
@@ -88,13 +110,28 @@ test.describe("Login Tests", () => {
     );
   });
 
-  //TEST 4 - Ensure a invalid user cannot login
+  //TEST 7 - Ensure a invalid user cannot login
   test("Ensure a user cannot log in with an invalid password", async ({
     page,
   }) => {
     //Fill in the username and password fields
     await loginPage.usernameInput.fill(dataModel.userName);
     await loginPage.passwordInput.fill(dataModel.incorrectPassword);
+    //Click the login button
+    await loginPage.loginButton.click();
+    //Assert that the user presented with an error message
+    await expect(page.locator('[data-test="error"]')).toHaveText(
+      "Epic sadface: Username and password do not match any user in this service"
+    );
+  });
+
+  //TEST 8 - Ensure a user cannot log in with an invalid username
+  test("Ensure a user cannot log in with an invalid username", async ({
+    page,
+  }) => {
+    //Fill in the username and password fields
+    await loginPage.usernameInput.fill("invalid_user");
+    await loginPage.passwordInput.fill(dataModel.password);
     //Click the login button
     await loginPage.loginButton.click();
     //Assert that the user presented with an error message
