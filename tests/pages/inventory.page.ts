@@ -1,6 +1,6 @@
 import { Locator } from "@playwright/test";
 
-export class LoginPage {
+export class InventoryPage {
   readonly page: any;
   //Inputs
   readonly usernameInput: Locator;

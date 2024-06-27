@@ -6,7 +6,7 @@ The standard username and password are stored in an object to enhance repeatabil
 //importing the POM to reuse the Username and Password
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../pages/login.page";
-import { DataModel } from "../dataObjectModel";
+import { DataModel } from "../data";
 
 test.describe("Login Tests", () => {
   let dataModel: DataModel;
