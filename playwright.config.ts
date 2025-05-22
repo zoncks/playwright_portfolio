@@ -25,7 +25,7 @@ export default defineConfig({
     timeout: 5000,
   },
   snapshotPathTemplate:
-    "{testDir}/visual-regression/{testFileName}/{projectName}/{testName}-GoldenImage{ext}",
+    "{testDir}/visual/__screenshots__/{projectName}/{testName}{ext}",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

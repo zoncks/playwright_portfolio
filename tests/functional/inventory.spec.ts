@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/login.page";
-import { InventoryPage } from "../pages/inventory.page";
-import { DataModel } from "../data";
+import { LoginPage } from "../../utils/pages/login.page";
+import { InventoryPage } from "../../utils/pages/inventory.page";
+import { DataModel } from "../../utils/fixtures/data";
 
 test.describe("Inventory Page Tests", () => {
   let dataModel: DataModel;
