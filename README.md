@@ -30,9 +30,13 @@ The project includes tests for:
 
 ```
 ├── tests/
-│   ├── pages/         # Page Object Models
-│   └── tests/         # Test files
-├── utils/             # Helper functions
+│   ├── functional/    # Functional test cases
+│   └── visual/       # Visual test cases
+├── utils/
+│   ├── fixtures/     # Test data and fixtures
+│   └── pages/        # Page Object Models
+├── playwright-report/ # Test execution reports
+├── test-results/     # Test artifacts and screenshots
 └── playwright.config.ts # Playwright configuration
 ```
 
