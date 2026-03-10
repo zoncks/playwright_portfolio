@@ -13,7 +13,7 @@ test.describe('Login Page', () => {
   let loginPage: LoginPage;
 
   test.beforeEach(async ({ page }) => {
-    dataModel = new DataModel(page);
+    dataModel = new DataModel();
     loginPage = new LoginPage(page);
     await page.goto("https://www.saucedemo.com/");
   });
@@ -34,7 +34,7 @@ test.describe('Login Page', () => {
       await loginPage.loginButton.click();
 
       //Assert the usernam error message is displayed
-      await expect(page.locator('[data-test="error"]')).toHaveText(
+      await expect(loginPage.errorMessage).toHaveText(
         "Epic sadface: Username is required"
       );
     });
@@ -46,7 +46,7 @@ test.describe('Login Page', () => {
       await loginPage.loginButton.click();
 
       //Assert the password error message is displayed
-      await expect(page.locator('[data-test="error"]')).toHaveText(
+      await expect(loginPage.errorMessage).toHaveText(
         "Epic sadface: Password is required"
       );
     });
@@ -59,7 +59,7 @@ test.describe('Login Page', () => {
       await loginPage.loginButton.click();
 
       //Assert the username error message is displayed
-      await expect(page.locator('[data-test="error"]')).toHaveText(
+      await expect(loginPage.errorMessage).toHaveText(
         "Epic sadface: Username is required"
       );
       //Populate the username field and submit without populating password
@@ -67,7 +67,7 @@ test.describe('Login Page', () => {
       await loginPage.loginButton.click();
 
       //Assert the password error message is displayed
-      await expect(page.locator('[data-test="error"]')).toHaveText(
+      await expect(loginPage.errorMessage).toHaveText(
         "Epic sadface: Password is required"
       );
 
@@ -76,7 +76,7 @@ test.describe('Login Page', () => {
       await loginPage.loginButton.click();
 
       //Assert the password error message is displayed
-      await expect(page.locator('[data-test="error"]')).not.toBeVisible();
+      await expect(loginPage.errorMessage).not.toBeVisible();
     });
   });
 
@@ -113,7 +113,7 @@ test.describe('Login Page', () => {
         //Click the login button
         await loginPage.loginButton.click();
         //Assert that the user presented with an error message
-        await expect(page.locator('[data-test="error"]')).toHaveText(
+        await expect(loginPage.errorMessage).toHaveText(
           "Epic sadface: Sorry, this user has been locked out."
         );
       });
@@ -128,7 +128,7 @@ test.describe('Login Page', () => {
         //Click the login button
         await loginPage.loginButton.click();
         //Assert that the user presented with an error message
-        await expect(page.locator('[data-test="error"]')).toHaveText(
+        await expect(loginPage.errorMessage).toHaveText(
           "Epic sadface: Username and password do not match any user in this service"
         );
       });
@@ -143,7 +143,7 @@ test.describe('Login Page', () => {
         //Click the login button
         await loginPage.loginButton.click();
         //Assert that the user presented with an error message
-        await expect(page.locator('[data-test="error"]')).toHaveText(
+        await expect(loginPage.errorMessage).toHaveText(
           "Epic sadface: Username and password do not match any user in this service"
         );
       });

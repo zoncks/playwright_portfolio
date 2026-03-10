@@ -3,7 +3,7 @@ export class DataModel {
   readonly password: string;
   readonly incorrectPassword: string;
 
-  constructor(page) {
+  constructor() {
     this.userName = "standard_user";
     this.password = "secret_sauce";
     this.incorrectPassword = "incorrect_password";

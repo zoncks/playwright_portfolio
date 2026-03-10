@@ -1,20 +1,9 @@
-import { Locator } from "@playwright/test";
+import { Page } from "@playwright/test";
 
 export class InventoryPage {
-  readonly page: any;
-  //Inputs
-  readonly usernameInput: Locator;
-  readonly passwordInput: Locator;
-  readonly loginButton: Locator;
+  readonly page: Page;
 
-  //Validation Messages
-  readonly usernameBlankErrorMessage: Locator;
-  readonly passwordBlankErrorMessage: Locator;
-
-  constructor(page: any) {
+  constructor(page: Page) {
     this.page = page;
-    this.usernameInput = page.locator('input[name="user-name"]');
-    this.passwordInput = page.locator('input[name="password"]');
-    this.loginButton = page.locator('input[type="submit"]');
   }
 }
